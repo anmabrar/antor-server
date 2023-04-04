@@ -19,7 +19,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 function verifyJWT(req, res, next) {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
-        return res.status(401).send('unauthorized access')
+        return res.status(401).send('unauthorized access');
     }
     const token = authHeader.split(' ')[1];
 
@@ -106,7 +106,7 @@ async function run() {
             const query = {};
             const users = await usersCollection.find(query).toArray();
             res.send(users);
-        })
+        });
 
         app.post('/users', async (req, res) => {
             const user = req.body;
