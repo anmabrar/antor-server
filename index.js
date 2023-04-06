@@ -11,12 +11,10 @@ const app = express();
 //middleware
 
 // Add the CORS header middleware
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Update the value to specify the allowed origin(s)
-    next();
-  });
-
-app.use(cors());
+app.use(cors({
+    origin:"http://localhost:3000",
+    methods:["GET","POST","PUT","DELETE"]
+}));
 app.use(express.json());
  
 
