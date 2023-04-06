@@ -8,13 +8,15 @@ const port = process.env.PORT || 5000;
 
 const app = express();
 
-const corsOptions ={
-    origin:'*', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200,
- }
 //middleware
-app.use(cors(corsOptions));
+
+// Add the CORS header middleware
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Update the value to specify the allowed origin(s)
+    next();
+  });
+
+app.use(cors());
 app.use(express.json());
  
 
@@ -130,7 +132,7 @@ async function run() {
             }
             const result = await usersCollection.updateOne(filter, updateDoc, options);
             res.send(result);
-        })
+        });
     }
     finally {
 
