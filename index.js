@@ -13,8 +13,7 @@ const port = process.env.PORT || 5000;
 const app = express();
 
 //middleware
-
-// Add the CORS header middleware
+//add CORS
 app.use(cors({
     origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -47,13 +46,13 @@ function sendBookingEmail(booking) {
         from: "anmabrar13@gmail.com", // verified sender email
         to: email || 'anmabrar13@gmail.com', // recipient email
         subject: `Your appointment for ${treatment} is confirmed`, // Subject line
-        text: "Hello world!", // plain text body
+        text: "", // plain text body
         html: `
         <h3>Your appointment is confirmed</h3>
         <div>
-            <p>Your appointment for treatment: ${treatment}</p>
+            <p>Your appointment for : ${treatment}</p>
             <p>Please visit us on ${appointmentDate} at ${slot}</p>
-            <p>Thanks from Doctors Portal.</p>
+            <p>Thanks from Antor.</p>
         </div>
         
         `, // html body
@@ -251,19 +250,13 @@ async function run() {
             res.send(result);
         });
 
-
-        // temporary to update price field on appointment options
-        // app.get('/addPrice', async (req, res) => {
-        //     const filter = {}
-        //     const options = { upsert: true }
-        //     const updatedDoc = {
-        //         $set: {
-        //             price: 99
-        //         }
-        //     }
-        //     const result = await appointmentOptionsCollection.updateMany(filter, updatedDoc, options);
-        //     res.send(result);
-        // })
+        //delete admin 
+        app.delete('/users/admin/:id', verifyJWT, verifyAdmin, async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const result = await usersCollection.deleteOne(filter);
+            res.send(result);
+        });
 
         //add Doctor
         app.post('/doctors', verifyJWT, verifyAdmin, async (req, res) => {
